@@ -26,13 +26,6 @@ const routes = [
     path: '/books/{bookId}',
     handler: editBookByIdHandler,
   },
-  {
-    methode: 'DELETE',
-    path: '/books/{bookId}',
-    handler: () => {
-
-    },
-  },
 ];
 
 module.exports = routes;
