@@ -3,15 +3,8 @@ const books = require('./books');
 
 const addBookHandler = (request, h) => {
   const {
-    name,
-    year,
-    author,
-    summary,
-    publisher,
-    pageCount,
-    readPage,
-    reading,
-  } = request.peyload;
+    name, year, author, summary, publisher, pageCount, readPage, reading,
+  } = request.payload;
 
   const id = nanoid(16);
   const finished = pageCount === readPage;
@@ -19,7 +12,7 @@ const addBookHandler = (request, h) => {
   const updatedAt = insertedAt;
 
   /** undefined name */
-  if (name === undefined) {
+  if (name === undefined || `${name}` === '') {
     const response = h.response({
       status: 'fail',
       message: 'Gagal menambahkan buku. Mohon isi nama buku',
@@ -29,7 +22,7 @@ const addBookHandler = (request, h) => {
   }
 
   /** readPage bigger than pagecount */
-  if (readPage > pageCount) {
+  if (`${readPage}` > `${pageCount}`) {
     const response = h.response({
       status: 'fail',
       message: 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount',
@@ -56,7 +49,7 @@ const addBookHandler = (request, h) => {
   books.push(newBook);
 
   /** Check if book success */
-  const isSuccess = books.filter((note) => note.id === id).length > 0;
+  const isSuccess = books.filter((book) => book.id === id).length > 0;
 
   if (isSuccess) {
     const response = h.response({
