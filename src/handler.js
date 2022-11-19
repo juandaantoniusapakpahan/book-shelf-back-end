@@ -72,12 +72,32 @@ const addBookHandler = (request, h) => {
 };
 
 /** Get BookS */
-const getBooksHandler = () => ({
-  status: 'success',
-  data: {
-    books,
-  },
-});
+const getBooksHandler = (request, h) => {
+  // const attribute = ['id', 'name', 'publisher'];
+  const keys = ['id', 'name', 'publisher'];
+  // eslint-disable-next-line array-callback-return
+  const book = books.filter((n) => n.name !== undefined).map((el) => keys.reduce((acc, key) => {
+    acc[key] = el[key];
+    return acc;
+  }, {}));
+
+  /** const book = [];
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < books.length; i++) {
+    const filter = {};
+    filter.id = books[i].id;
+    filter.name = books[i].name;
+    filter.publisher = books[i].publisher;
+    book.push(filter);
+  }* *///
+  const response = h.response({
+    status: 'success',
+    data: {
+      book,
+    },
+  });
+  return response;
+};
 
 /** GET BOOK BY ID */
 const getBookByIdHandler = (request, h) => {
