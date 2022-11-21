@@ -74,68 +74,63 @@ const addBookHandler = (request, h) => {
 /** Get BookS */
 const getBooksHandler = (request, h) => {
   const { name, reading, finished } = request.query;
-  const readingV = reading === '1';
-  const finishedV = finished === '1';
 
   const keys = ['id', 'name', 'publisher'];
 
   // eslint-disable-next-line array-callback-return, no-bitwise, max-len
   if (`${name}` !== 'undefined') {
+    const nameV = name.toLowerCase();
     // eslint-disable-next-line max-len
-    const book = books.filter((b) => (b.name.toString().toLowerCase() === (name.toLowerCase()))).map((el) => keys.reduce((acc, key) => {
-      acc[key] = el[key];
-      return acc;
-    }, {}));
     const response = h.response({
       status: 'success',
       data: {
-        book,
+        // eslint-disable-next-line max-len
+        books: books.filter((b) => (b.name.toString().toLowerCase().includes(nameV))).map((el) => keys.reduce((acc, key) => {
+          acc[key] = el[key];
+          return acc;
+        }, {})),
       },
     });
     return response;
   }
 
   if (`${reading}` !== 'undefined') {
+    const readingV = reading === '1';
     // eslint-disable-next-line max-len
-    const book = books.filter((b) => b.reading === readingV).map((el) => keys.reduce((acc, key) => {
-      acc[key] = el[key];
-      return acc;
-    }, {}));
-
     const response = h.response({
       status: 'success',
       data: {
-        book,
+        books: books.filter((b) => b.reading === readingV).map((el) => keys.reduce((acc, key) => {
+          acc[key] = el[key];
+          return acc;
+        }, {})),
       },
     });
     return response;
   }
 
   if (`${finished}` !== 'undefined') {
+    const finishedV = finished === '1';
     // eslint-disable-next-line max-len
-    const book = books.filter((b) => b.finished === finishedV).map((el) => keys.reduce((acc, key) => {
-      acc[key] = el[key];
-      return acc;
-    }, {}));
-
     const response = h.response({
       status: 'success',
       data: {
-        book,
+        books: books.filter((b) => b.finished === finishedV).map((el) => keys.reduce((acc, key) => {
+          acc[key] = el[key];
+          return acc;
+        }, {})),
       },
     });
     return response;
   }
 
-  const book = books.filter((b) => b.name !== undefined).map((el) => keys.reduce((acc, key) => {
-    acc[key] = el[key];
-    return acc;
-  }, {}));
-
   const response = h.response({
     status: 'success',
     data: {
-      book,
+      books: books.filter((b) => b.name !== undefined).map((el) => keys.reduce((acc, key) => {
+        acc[key] = el[key];
+        return acc;
+      }, {})),
     },
   });
   return response;
